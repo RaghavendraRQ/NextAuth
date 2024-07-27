@@ -4,7 +4,6 @@
  */
 export const PublicRoutes: string[] = [
     '/',
-    '/about',
     '/verify-email',
 ]
 
@@ -17,6 +16,7 @@ export const AuthRoutes: string[] = [
     '/signup',
     '/auth-error',
     '/reset-password',
+    '/new-password',
 ]
 /**
  * Routes that used for providers

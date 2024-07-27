@@ -13,7 +13,7 @@ const SearchBarComponent = () => {
       return;
     }
     setError(false);
-    console.log(input);
+    // console.log(input);
     setInput("");
   };
   return (

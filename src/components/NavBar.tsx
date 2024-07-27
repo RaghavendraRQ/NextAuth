@@ -1,6 +1,9 @@
+'use client'
 import React from "react";
 import NavBarSubscribeComponent from "./NavBarSubscribe";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 type NavBarProp = {
   name: string;
@@ -17,23 +20,32 @@ const NavBarProps: NavBarProp[] = [
     url: "/about",
   },
   {
-    name: "Portfolio",
-    url: "/portfolio",
+    name: "Settings",
+    url: "/settings",
   },
+  {
+    name: 'Admin',
+    url: '/admin'
+  },
+  {
+    name: 'Server',
+    url: '/server'
+  }
 ];
 
 const NavBarComponent = () => {
+  const pathname = usePathname()
   return (
-    <div className="flex mt-10 justify-center gap-10 items-center">
-      <span className="flex items-center justify-around gap-5 bg-[#C8DBD7] w-[700px] h-[55px] rounded-md">
+    <div className="bg-secondary p-4 rounded-xl w-[800px] shadow-sm flex justify-between gap-10 items-center">
+      <div className="">
         {NavBarProps.map((prop, index) => {
           return (
-            <Link href={prop.url} key={index}>
-              {prop.name}
-            </Link>
+            <Button key={index} variant={pathname.toLowerCase() === prop.url.toLowerCase() ? 'default': 'outline'} asChild>
+              <Link href={prop.url}>{prop.name}</Link>
+            </Button>
           );
         })}
-      </span>
+      </div>
       <NavBarSubscribeComponent />
     </div>
   );

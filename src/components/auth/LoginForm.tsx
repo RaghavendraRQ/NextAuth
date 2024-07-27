@@ -25,6 +25,7 @@ const LoginFormComponent = () => {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Email already in use" : ''
 
+  const [twoFactor, setTwoFactor] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -40,8 +41,19 @@ const LoginFormComponent = () => {
     setSuccess("");
     startTransition(() => {
       login(values).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
+        if (data.error) {
+          form.reset();
+          setError(data?.error);
+        }
+        if (data.success) {
+          form.reset();
+          setSuccess(data.success);
+        }
+        if (data.twoFactor) {
+          setTwoFactor(true);
+        }
+      }).catch(() => {
+        setError('Something went wrong');
       });
     });
   };
@@ -57,7 +69,28 @@ const LoginFormComponent = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className=" space-y-6">
           <div className="space-y-4">
-            <FormField
+            {twoFactor && (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>2FA Code</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="123456"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {!twoFactor && (
+              <>
+              <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -96,11 +129,13 @@ const LoginFormComponent = () => {
                 </FormItem>
               )}
             />
+              </>
+            )}
           </div>
           <FormErrorComponent message={error || urlError} />
           <FormSuccessComponent message={success} />
           <Button type="submit" className="w-full" disabled={isPending}>
-            Login
+            {twoFactor ? "Verify" : "Login"}
           </Button>
         </form>
       </Form>

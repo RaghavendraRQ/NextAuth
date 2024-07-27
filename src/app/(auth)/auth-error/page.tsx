@@ -5,7 +5,7 @@ import {ExclamationTriangleIcon} from '@radix-ui/react-icons'
 const AuthErrorPage = () => {
   return (
     <CardWrapperComponent
-    headerLabel='RQ Authentication'
+    headerLabel='Please try again'
     backButtonLabel='Go back to Login'
     backButtonHref='/login'
     >

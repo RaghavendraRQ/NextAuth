@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBarComponent from "@/components/NavBar";
-import { QueryProvider } from "@/providers/QueryProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,15 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <QueryProvider>
-          <div className="m-5">
+    <AuthProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <div className="flex items-center justify-center m-5">
             <NavBarComponent />
           </div>
+          <Toaster richColors position="top-right" closeButton/>
           {children}
-        </QueryProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
